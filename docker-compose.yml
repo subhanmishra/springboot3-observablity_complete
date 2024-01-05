@@ -1,0 +1,58 @@
+version: "4"
+services:
+  mysql:
+    image: mysql:8
+    container_name: 'sb3_obs_mysqldb'
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+    ports:
+      - "3316:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+  tempo:
+    image: grafana/tempo
+    container_name: 'sb3_obs_tempo'
+    command: [ "-config.file=/etc/tempo.yml" ]
+    volumes:
+      - ./docker/tempo/tempo.yml:/etc/tempo.yml:ro
+      - ./docker/tempo/tempo-data:/tmp/tempo
+    ports:
+      - "3200:3200"  # Tempo
+      - "9411:9411" # zipkin
+
+  loki:
+    image: grafana/loki
+    container_name: 'sb3_obs_loki'
+    command: [ "-config.file=/etc/loki/local-config.yaml" ]
+    ports:
+      - "3100:3100"
+
+  prometheus:
+    image: prom/prometheus
+    container_name: 'sb3_obs_prometheus'
+    command:
+      - --enable-feature=exemplar-storage
+      - --web.enable-remote-write-receiver
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    container_name: 'sb3_obs_grafana'
+    volumes:
+      - ./docker/grafana/datasource:/etc/grafana/provisioning/datasources:ro
+#      - ./docker/grafana/dashboard/default.yml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./docker/grafana/dashboard:/etc/grafana/provisioning/dashboards/
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      #- GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH="/var/lib/grafana/dashboards/exported_dashboard.json"
+    ports:
+      - "3000:3000"
+volumes:
+  mysql-data:

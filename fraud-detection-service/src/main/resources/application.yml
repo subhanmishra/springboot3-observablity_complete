@@ -1,0 +1,41 @@
+logging:
+    pattern:
+        correlation: '[${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health, info, metrics, prometheus
+    endpoint:
+        health:
+            show-details: always
+    metrics:
+        distribution:
+            percentiles-histogram:
+                http:
+                    server:
+                        requests: true
+                    client:
+                        requests: true
+    observations:
+        key-values:
+            application: fraud-detection
+    tracing:
+        sampling:
+            probability: 1.0
+server:
+    port: 8081
+spring:
+    thread:
+        virtual:
+            enabled: true
+    application:
+        name: fraud-detection
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        password: mysql
+        url: jdbc:mysql://localhost:3316/fraud_detection
+        username: root
+    sql:
+        init:
+            mode: always
