@@ -1,0 +1,101 @@
+server:
+  port: 9001
+
+
+logging:
+  pattern:
+    correlation: '[${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+          client:
+            requests: true
+  observations:
+    key-values:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0
+
+spring:
+  output.ansi.enabled: ALWAYS
+  application:
+    name: gateway-client-credentials
+  threads:
+    virtual:
+      enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8085
+#      client:
+#        registration:
+#          spring:
+#            client-id: client
+#            client-secret: secret
+#            scope: user.read,user.write,openid
+#            authorization-grant-type: client_credentials
+#        provider:
+#          spring:
+#            issuer-uri: ${SPRING_AUTH_SERVER_URL:http://localhost:8085}
+
+  cloud:
+    gateway:
+      metrics:
+        enabled: true
+      default-filters:
+        - SaveSession
+        - TokenRelay
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter:
+              replenishRate: 10
+              burstCapacity: 20
+              requestedTokens: 1
+      routes:
+        - id: loan-route
+          uri: http://localhost:8080
+          predicates:
+            - Path=/loan/**
+            - Method=GET,POST
+          filters:
+            - AddRequestHeader=X-Tenant,acme
+            - AddResponseHeader=X-Genre,fantasy
+            - name: CircuitBreaker
+              args:
+                name: loanService
+                fallbackUri: forward:/loan-fallback
+            - name: Retry
+              args:
+                retries: 3
+                method: GET
+                backoff:
+                  firstBackoff: 50ms
+                  maxBackoff: 500ms
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      bookService:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        registerHealthIndicator: true
+  timelimiter:
+    instances:
+      bookService:
+        timeoutDuration: 3s

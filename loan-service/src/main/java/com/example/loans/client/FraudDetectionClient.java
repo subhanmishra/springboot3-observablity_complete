@@ -1,6 +1,6 @@
 package com.example.loans.client;
 
-import com.example.loans.entity.LoanStatus;
+import com.example.loans.model.LoanStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.service.annotation.GetExchange;
 

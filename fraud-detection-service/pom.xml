@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.programming.techie</groupId>
+        <groupId>com.example.observability</groupId>
         <artifactId>springboot3-observability</artifactId>
         <version>1.0</version>
     </parent>
@@ -15,6 +15,10 @@
         <java.version>21</java.version>
     </properties>
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jdbc</artifactId>

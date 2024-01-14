@@ -1,18 +1,55 @@
 version: "4"
 services:
+  postgres:
+    image: postgres:latest
+    container_name: 'sb3_obs_postgres'
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=spring_auth_server_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+#      - PGUSER=postgres
+#      - POSTGRES_NAME=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres:/data/postgres
+  pgadmin:
+    container_name: 'sb3_obs_pgadmin'
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@localhost.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 5050
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+      - ./docker/docker_pgadmin_servers.json:/pgadmin4/servers.json
+    ports:
+      - '5050:5050'
+    entrypoint:
+      - "/bin/sh"
+      - "-c"
+      - "/bin/echo 'postgres:5432:*:postgres:postgres' > /tmp/pgpassfile && chmod 600 /tmp/pgpassfile && /entrypoint.sh"
+    depends_on:
+      - postgres
+
   mysql:
     image: mysql:8
+    restart: unless-stopped
     container_name: 'sb3_obs_mysqldb'
     environment:
       MYSQL_ROOT_PASSWORD: mysql
     ports:
-      - "3316:3306"
+      - "3306:3306"
     volumes:
       - ./mysql-data:/var/lib/mysql
       - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
   tempo:
     image: grafana/tempo
     container_name: 'sb3_obs_tempo'
+    restart: unless-stopped
     command: [ "-config.file=/etc/tempo.yml" ]
     volumes:
       - ./docker/tempo/tempo.yml:/etc/tempo.yml:ro
@@ -24,6 +61,7 @@ services:
   loki:
     image: grafana/loki
     container_name: 'sb3_obs_loki'
+    restart: unless-stopped
     command: [ "-config.file=/etc/loki/local-config.yaml" ]
     ports:
       - "3100:3100"
@@ -31,6 +69,7 @@ services:
   prometheus:
     image: prom/prometheus
     container_name: 'sb3_obs_prometheus'
+    restart: unless-stopped
     command:
       - --enable-feature=exemplar-storage
       - --web.enable-remote-write-receiver
@@ -43,6 +82,7 @@ services:
   grafana:
     image: grafana/grafana
     container_name: 'sb3_obs_grafana'
+    restart: unless-stopped
     volumes:
       - ./docker/grafana/datasource:/etc/grafana/provisioning/datasources:ro
 #      - ./docker/grafana/dashboard/default.yml:/etc/grafana/provisioning/dashboards/main.yaml
@@ -54,5 +94,13 @@ services:
       #- GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH="/var/lib/grafana/dashboards/exported_dashboard.json"
     ports:
       - "3000:3000"
+  redis:
+    image: redis:latest
+    container_name: 'sb3_obs_redis'
+    restart: unless-stopped
+    ports:
+      - 6379:6379
 volumes:
   mysql-data:
+  postgres:
+  pgadmin:

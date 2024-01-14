@@ -8,7 +8,7 @@
         <version>3.2.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.programming.techie</groupId>
+    <groupId>com.example.observability</groupId>
     <artifactId>springboot3-observability</artifactId>
     <version>1.0</version>
     <name>springboot3-observability</name>
@@ -20,6 +20,9 @@
     <modules>
         <module>loan-service</module>
         <module>fraud-detection-service</module>
+        <module>gateway</module>
+        <module>gateway-client-credentials</module>
+        <module>authorization-server</module>
     </modules>
     <build>
         <plugins>

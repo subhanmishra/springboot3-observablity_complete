@@ -1,7 +1,7 @@
 package com.example.loans.dto;
 
-import com.example.loans.entity.Loan;
-import com.example.loans.entity.LoanStatus;
+import com.example.loans.model.Loan;
+import com.example.loans.model.LoanStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,16 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class LoanDto {
-    private String loanId;
-    private String customerName;
-    private int customerId;
-    private BigDecimal amount;
-    private LoanStatus loanStatus;
+public record LoanDto(String loanId, String customerName, int customerId, BigDecimal amount, LoanStatus loanStatus) {
 
     public static LoanDto from(Loan loan) {
         return new LoanDto(loan.getLoanId(), loan.getCustomerName(), loan.getCustomerId(),

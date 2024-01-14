@@ -1,0 +1,74 @@
+#logging:
+#    level:
+#        org:
+#            springframework:
+#                security: trace
+spring:
+  output.ansi.enabled: ALWAYS
+  application:
+    name: auth-server
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spring_auth_server_db
+    username: postgres
+    password: postgres
+    sql:
+      init:
+        mode: always
+#  security:
+#    oauth2:
+#      resource:
+#      authorizationserver:
+#        client:
+#          gateway-client:
+#            registration:
+#              client-id: client
+#              client-secret: '{bcrypt}$2a$10$jdJGhzsiIqYFpjJiYWMl/eKDOd8vdyQis2aynmFN0dgJ53XvpzzwC'
+#              authorization-grant-types:
+#                - client_credentials
+#                - authorization_code
+#                - refresh_token
+#              client-authentication-methods:
+#                - client_secret_basic
+#              redirect-uris:
+#                - http://127.0.0.1:9000/login/oauth2/code/gateway-client
+#              post-logout-redirect-uris:
+#                - "http://127.0.0.1:9000/logged-out"
+#              scopes:
+#                - user.read
+#                - user.write
+#                - openid
+#            require-authorization-consent: true
+
+server:
+  port: 8085
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+          client:
+            requests: true
+  observations:
+    key-values:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0
+
+jwt:
+  key:
+    public: classpath:pub_key.pem
+    private: classpath:priv_key.pem
