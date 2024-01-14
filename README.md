@@ -21,10 +21,13 @@ Run Fraud Detection Service Application
 
 
 ## Accessing the services
-1. Grafana: http://localhost:3000
-2. Prometheus: http://localhost:9090
-3. Tempo: http://localhost:3110
-4. Loki: http://localhost:3100
+1. Loan service Authorization Code: http://127.0.0.1:9000/loan
+2. Loan service Client Credentials: http://localhost:9001/loan
+3. Grafana: http://localhost:3000
+4. Prometheus: http://localhost:9090
+5. Tempo: http://localhost:3110
+6. Loki: http://localhost:3100
+7. PgAdmin: http://localhost:5050
 
 ## Project Overview
 
