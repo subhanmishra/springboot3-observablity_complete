@@ -26,7 +26,7 @@ public class LoanController {
 
     @PostMapping()
     @PreAuthorize("hasAuthority('SCOPE_user.write')")
-    public String applyLoan(@RequestBody LoanDto loanDto, @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        return loanService.applyLoan(loanDto, authHeader);
+    public String applyLoan(@RequestBody LoanDto loanDto) {
+        return loanService.applyLoan(loanDto);
     }
 }

@@ -30,7 +30,7 @@ public class LoanService {
         return loans;
     }
     @Transactional
-    public String applyLoan(LoanDto loanDto, String authHeader) {
+    public String applyLoan(LoanDto loanDto) {
         var loan = Loan.from(loanDto);
         log.info("Calling Fraud Detection Service for customer id: {}", loan.getCustomerId());
         LoanStatus loanStatus = fraudDetectionClient.evaluateLoan(loan.getCustomerId());
