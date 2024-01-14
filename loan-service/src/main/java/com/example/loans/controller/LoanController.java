@@ -3,6 +3,7 @@ package com.example.loans.controller;
 import com.example.loans.dto.LoanDto;
 import com.example.loans.service.LoanService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,9 @@ public class LoanController {
         return loanService.listAllLoans();
     }
 
-    @PostMapping
+    @PostMapping()
     @PreAuthorize("hasAuthority('SCOPE_user.write')")
-    public String applyLoan(@RequestBody LoanDto loanDto) {
-        return loanService.applyLoan(loanDto);
+    public String applyLoan(@RequestBody LoanDto loanDto, @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+        return loanService.applyLoan(loanDto, authHeader);
     }
 }

@@ -27,11 +27,11 @@ server:
   port: 8081
 spring:
   output.ansi.enabled: ALWAYS
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          issuer-uri: http://localhost:8085
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8085
 #        token-propagation: bearer
   thread:
     virtual:
