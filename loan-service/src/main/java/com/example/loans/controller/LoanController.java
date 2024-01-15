@@ -3,7 +3,7 @@ package com.example.loans.controller;
 import com.example.loans.dto.LoanDto;
 import com.example.loans.service.LoanService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/loan")
 @RequiredArgsConstructor
+@Slf4j
 public class LoanController {
 
     private final LoanService loanService;
@@ -29,4 +30,6 @@ public class LoanController {
     public String applyLoan(@RequestBody LoanDto loanDto) {
         return loanService.applyLoan(loanDto);
     }
+
+
 }

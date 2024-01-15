@@ -2,10 +2,13 @@ logging:
   pattern:
     correlation: '[${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
 management:
+  health:
+    circuitbreakers:
+      enabled: true
   endpoints:
     web:
       exposure:
-        include: health, info, metrics, prometheus
+        include: health, info, metrics, prometheus, circuitbreakers
   endpoint:
     health:
       show-details: always
@@ -32,7 +35,6 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8085
-#        token-propagation: bearer
   threads:
     virtual:
       enabled: true
@@ -46,3 +48,22 @@ spring:
   sql:
     init:
       mode: always
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      fraudService:
+        sliding-window-type: count_based
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5000
+        registerHealthIndicator: true
+        ignoreExceptions:
+          # Ignore 4xx exceptions.
+          - org.springframework.web.client.HttpClientErrorException
+  timelimiter:
+    instances:
+      fraudService:
+        timeoutDuration: 1s

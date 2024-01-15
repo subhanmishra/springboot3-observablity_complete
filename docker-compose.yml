@@ -17,6 +17,7 @@ services:
   pgadmin:
     container_name: 'sb3_obs_pgadmin'
     image: dpage/pgadmin4:latest
+    restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@localhost.com
       PGADMIN_DEFAULT_PASSWORD: admin

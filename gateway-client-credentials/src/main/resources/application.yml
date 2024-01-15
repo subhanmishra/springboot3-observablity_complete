@@ -89,13 +89,18 @@ spring:
 resilience4j:
   circuitbreaker:
     instances:
-      bookService:
+      loanService:
+        sliding-window-type: count_based
         slidingWindowSize: 10
         permittedNumberOfCallsInHalfOpenState: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
         failureRateThreshold: 50
-        waitDurationInOpenState: 10000
+        waitDurationInOpenState: 5000
         registerHealthIndicator: true
+        ignoreExceptions:
+          # Ignore 4xx exceptions.
+          - org.springframework.web.client.HttpClientErrorException
   timelimiter:
     instances:
-      bookService:
+      loanService:
         timeoutDuration: 3s
