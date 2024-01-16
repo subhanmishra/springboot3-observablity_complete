@@ -33,6 +33,7 @@ build/
 .vscode/
 
 ### docker volumes
-./mysql-data
-./pgadmin
-./postgres
+mysql-data
+pgadmin
+postgres
+docker/tempo/tempo-data

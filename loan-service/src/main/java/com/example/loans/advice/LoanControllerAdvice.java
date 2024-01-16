@@ -17,6 +17,9 @@ public class LoanControllerAdvice {
             case HttpClientErrorException hce -> ProblemDetail
                     .forStatusAndDetail(HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), hce.getMessage());
 
+            case RuntimeException re when re.getMessage().contains("Forbidden") -> ProblemDetail
+                    .forStatusAndDetail(HttpStatusCode.valueOf(HttpStatus.FORBIDDEN.value()), re.getMessage());
+
 
             case RuntimeException re -> ProblemDetail
                     .forStatusAndDetail(HttpStatusCode.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), re.getMessage());

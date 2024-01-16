@@ -21,8 +21,8 @@ public class ResourceServerConfig {
                 .authorizeHttpRequests(request ->
                         request
                                 .requestMatchers("/actuator/**").permitAll()
-                                .requestMatchers(HttpMethod.GET,"/loan/**").hasAuthority("SCOPE_user.read")
-                                .requestMatchers(HttpMethod.POST,"/loan/**").hasAuthority("SCOPE_user.write")
+//                                .requestMatchers(HttpMethod.GET,"/loan/**").hasAuthority("SCOPE_user.read")
+//                                .requestMatchers(HttpMethod.POST,"/loan/**").hasAuthority("SCOPE_user.write")
                                 .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
