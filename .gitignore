@@ -36,4 +36,4 @@ build/
 mysql-data
 pgadmin
 postgres
-docker/tempo/tempo-data
+tempo-data
