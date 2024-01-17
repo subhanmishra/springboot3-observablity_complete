@@ -14,7 +14,6 @@ services:
       - "5432:5432"
     volumes:
       - ./postgres:/var/lib/postgresql/data
-#      - ./postgres:/data/postgres
 
   pgadmin:
     container_name: 'sb3_obs_pgadmin'
@@ -56,7 +55,7 @@ services:
     command: [ "-config.file=/etc/tempo.yml" ]
     volumes:
       - ./docker/tempo/tempo.yml:/etc/tempo.yml:ro
-      - ./docker/tempo/tempo-data:/tmp/tempo
+      - ./tempo-data:/tmp/tempo
     ports:
       - "3200:3200"  # Tempo
       - "9411:9411" # zipkin
@@ -107,3 +106,4 @@ volumes:
   mysql-data:
   postgres:
   pgadmin:
+  tempo-data:
