@@ -1,5 +1,6 @@
 package com.example.fraudetect.controller;
 
+import com.example.fraudetect.dto.FraudDto;
 import com.example.fraudetect.model.LoanStatus;
 import com.example.fraudetect.service.FraudDetectionService;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,12 @@ public class FraudDetectionController {
     public LoanStatus checkForFraud(@PathVariable int customerId) {
         log.info("Checking for fraud for customer id: {}", customerId);
         return fraudDetectionService.checkForFraud(customerId);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_user.write')")
+    public String createFraudRecord(@RequestBody FraudDto fraudDto) {
+        log.info("Creating fraud entry customer id: {}", fraudDto.customerId());
+        return fraudDetectionService.createFraudRecord(fraudDto);
     }
 }

@@ -69,6 +69,11 @@ spring:
               burstCapacity: 20
               requestedTokens: 1
       routes:
+        - id: fraud-route
+          uri: http://localhost:8081
+          predicates:
+            - Path=/fraud/**
+            - Method=POST
         - id: loan-route
           uri: http://localhost:8080
           predicates:

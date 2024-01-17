@@ -1,6 +1,5 @@
 truncate table fraud_records;
-ALTER TABLE fraud_records
-    AUTO_INCREMENT = 1;
+ALTER TABLE fraud_records AUTO_INCREMENT = 1;
 INSERT INTO fraud_records (id, fraudRecordId, customerId)
 VALUES (1, UUID(), 101),
        (2, UUID(), 103);

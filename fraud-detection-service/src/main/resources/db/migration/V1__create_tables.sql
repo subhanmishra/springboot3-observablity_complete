@@ -1,7 +1,6 @@
 CREATE TABLE fraud_records
 (
-    id            BIGINT      NOT NULL,
+    id            BIGINT AUTO_INCREMENT PRIMARY KEY,
     fraudRecordId VARCHAR(36) NOT NULL,
-    customerId    INT         NOT NULL,
-    PRIMARY KEY (id)
+    customerId    INT         NOT NULL
 );

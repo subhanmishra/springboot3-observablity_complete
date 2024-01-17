@@ -13,7 +13,9 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres:/data/postgres
+      - ./postgres:/var/lib/postgresql/data
+#      - ./postgres:/data/postgres
+
   pgadmin:
     container_name: 'sb3_obs_pgadmin'
     image: dpage/pgadmin4:latest
@@ -26,7 +28,7 @@ services:
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
     volumes:
       - ./pgadmin:/var/lib/pgadmin
-      - ./docker/docker_pgadmin_servers.json:/pgadmin4/servers.json
+      - ./docker/pgadmin/docker_pgadmin_servers.json:/pgadmin4/servers.json
     ports:
       - '5050:5050'
     entrypoint:
