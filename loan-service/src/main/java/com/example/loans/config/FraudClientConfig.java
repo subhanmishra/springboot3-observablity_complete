@@ -51,24 +51,24 @@ public class FraudClientConfig {
 
     }
 
-    @Bean
-    RestTemplate restTemplate(RestTemplateBuilder builder){
-        return builder
-                .additionalInterceptors((request, body, execution) -> {
-                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                    if (authentication == null) {
-                        return execution.execute(request, body);
-                    }
-
-                    if (!(authentication.getCredentials() instanceof AbstractOAuth2Token)) {
-                        return execution.execute(request, body);
-                    }
-
-                    AbstractOAuth2Token token = (AbstractOAuth2Token) authentication.getCredentials();
-                    request.getHeaders().setBearerAuth(token.getTokenValue());
-                    return execution.execute(request, body);
-                })
-                .requestFactory(() -> new JdkClientHttpRequestFactory())
-                .build();
-    }
+//    @Bean
+//    RestTemplate restTemplate(RestTemplateBuilder builder){
+//        return builder
+//                .additionalInterceptors((request, body, execution) -> {
+//                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//                    if (authentication == null) {
+//                        return execution.execute(request, body);
+//                    }
+//
+//                    if (!(authentication.getCredentials() instanceof AbstractOAuth2Token)) {
+//                        return execution.execute(request, body);
+//                    }
+//
+//                    AbstractOAuth2Token token = (AbstractOAuth2Token) authentication.getCredentials();
+//                    request.getHeaders().setBearerAuth(token.getTokenValue());
+//                    return execution.execute(request, body);
+//                })
+//                .requestFactory(() -> new JdkClientHttpRequestFactory())
+//                .build();
+//    }
 }
