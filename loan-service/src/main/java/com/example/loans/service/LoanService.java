@@ -45,9 +45,9 @@ public class LoanService {
         LoanStatus loanStatus = fraudDetectionClient.evaluateLoan(loan.getCustomerId());
         log.info("Fraud Detection Service response: {}", loanStatus);
         loan.setLoanStatus(loanStatus);
+        loan.setLoanId(UUID.randomUUID().toString());
+        loanRepository.save(loan);
         if (loanStatus.equals(LoanStatus.APPROVED)) {
-            loan.setLoanId(UUID.randomUUID().toString());
-            loanRepository.save(loan);
             return "Loan applied successfully";
         }
         return "Sorry! Your loan was not approved";
