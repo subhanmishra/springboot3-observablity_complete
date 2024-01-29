@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,7 +24,6 @@ public class LoanService {
 
     private final FraudDetectionClient fraudDetectionClient;
     private final LoanRepository loanRepository;
-    private final RestTemplate restTemplate;
 
     @Transactional(readOnly = true)
     public List<LoanDto> listAllLoans() {
@@ -42,7 +40,6 @@ public class LoanService {
     public String applyLoan(LoanDto loanDto) {
         var loan = Loan.from(loanDto);
         log.info("Calling Fraud Detection Service for customer id: {}", loan.getCustomerId());
-        //LoanStatus loanStatus = restTemplate.getForObject("http://localhost:8081/fraud/check/" + loan.getCustomerId(), LoanStatus.class);;
 
 
         LoanStatus loanStatus = fraudDetectionClient.evaluateLoan(loan.getCustomerId());
