@@ -17,6 +17,8 @@ public class SecurityConfig {
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         return http
                 .authorizeExchange(exchange -> exchange.pathMatchers("/actuator/**").permitAll()
+                        .pathMatchers("/v3/api-docs/**").permitAll()
+//                        .pathMatchers("/swagger-ui-custom.html").permitAll()
                         .anyExchange().authenticated())
                 .oauth2Login(Customizer.withDefaults())
                 .build();

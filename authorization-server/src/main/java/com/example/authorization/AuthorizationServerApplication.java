@@ -11,8 +11,10 @@ import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.provisioning.UserDetailsManager;
 
+import java.time.Duration;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -62,6 +64,10 @@ public class AuthorizationServerApplication {
                                         AuthorizationGrantType.REFRESH_TOKEN)))
                                 .redirectUri("http://127.0.0.1:9000/login/oauth2/code/gateway-client")
                                 .scopes(scopes -> scopes.addAll(Set.of("user.read", "user.write", OidcScopes.OPENID)))
+                                .tokenSettings(TokenSettings.builder()
+                                        .accessTokenTimeToLive(Duration.ofMinutes(10))
+                                        .refreshTokenTimeToLive(Duration.ofHours(2))
+                                        .build())
                                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                                 .postLogoutRedirectUri("http://127.0.0.1:9000/login")
                                 .build()

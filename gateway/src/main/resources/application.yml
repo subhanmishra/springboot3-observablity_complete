@@ -1,6 +1,11 @@
 server:
   port: 9000
 
+#springdoc:
+#  api-docs:
+#    path: /openapi/api-docs
+#  swagger-ui:
+#    path: /openapi/swagger-ui-custom.html
 #logging:
 #  pattern:
 #    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
@@ -75,6 +80,12 @@ spring:
               burstCapacity: 20
               requestedTokens: 1
       routes:
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+              - Path=/v3/api-docs/**
+          filters:
+              - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
         - id: loan-route
           uri: http://localhost:8080
           predicates:
